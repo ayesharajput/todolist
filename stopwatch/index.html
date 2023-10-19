@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Stopwatch</title>
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: "Arial", sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #stopwatch {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin: 20px;
+            color: #333;
+        }
+
+        .time {
+            font-size: 2em;
+            margin: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .number {
+            background-color: #333;
+            color: #fff;
+            border-radius: 5px;
+            padding: 5px;
+            margin: 0 5px;
+        }
+
+        .controls {
+            display: flex;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .start {
+            background-color: #4caf50;
+            color: #fff;
+        }
+
+        .pause {
+            background-color: #f90;
+            color: #fff;
+        }
+
+        .reset {
+            background-color: #f44336;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div id="stopwatch">
+        <h1>STOPWATCH</h1>
+        <div class="time">
+            <span class="number" id="hour">00</span>:
+            <span class="number" id="min">00</span>:
+            <span class="number" id="sec">00</span>:
+            <span class="number" id="msec">00</span>
+        </div>
+        <div class="controls">
+            <button id="startStop" class="start">Start</button>
+            <button id="pause" class="pause">Pause</button>
+            <button id="reset" class="reset">Reset</button>
+        </div>
+    </div>
+    <script>
+        var hour = 0;
+        var min = 0;
+        var sec = 0;
+        var msec = 0;
+        var interval;
+        var isRunning = false;
+
+        var hourHeading = document.getElementById("hour");
+        var minHeading = document.getElementById("min");
+        var secHeading = document.getElementById("sec");
+        var msecHeading = document.getElementById("msec");
+        var startStopButton = document.getElementById("startStop");
+        var pauseButton = document.getElementById("pause");
+        var resetButton = document.getElementById("reset");
+
+        function formatTime(value) {
+            return value.toString().padStart(2, '0');
+        }
+
+        function updateDisplay() {
+            hourHeading.textContent = formatTime(hour);
+            minHeading.textContent = formatTime(min);
+            secHeading.textContent = formatTime(sec);
+            msecHeading.textContent = formatTime(msec);
+        }
+
+        function startStop() {
+            if (isRunning) {
+                clearInterval(interval);
+                startStopButton.textContent = "Start";
+                pauseButton.textContent = "Pause";
+            } else {
+                interval = setInterval(timer, 10);
+                startStopButton.textContent = "Stop";
+                pauseButton.textContent = "Pause";
+            }
+            isRunning = !isRunning;
+        }
+
+        function pause() {
+            clearInterval(interval);
+            startStopButton.textContent = "Start";
+            pauseButton.textContent = "Paused";
+            isRunning = false;
+        }
+
+        function timer() {
+            msec++;
+            if (msec >= 100) {
+                sec++;
+                msec = 0;
+            }
+            if (sec >= 60) {
+                min++;
+                sec = 0;
+            }
+            if (min >= 60) {
+                hour++;
+                min = 0;
+            }
+            updateDisplay();
+        }
+
+        function reset() {
+            clearInterval(interval);
+            hour = 0;
+            min = 0;
+            sec = 0;
+            msec = 0;
+            updateDisplay();
+            startStopButton.textContent = "Start";
+            pauseButton.textContent = "Pause";
+            isRunning = false;
+        }
+
+        startStopButton.addEventListener("click", startStop);
+        pauseButton.addEventListener("click", pause);
+        resetButton.addEventListener("click", reset);
+    </script>
+</body>
+</html>
